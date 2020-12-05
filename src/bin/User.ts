@@ -1,49 +1,61 @@
-const users: ({
-    id: number,
-    username: string,
-    password: string,
+import jwt from 'jsonwebtoken';
+import { client } from '../connections/redis';
+
+export default class User {
+    user_id: number;
+    username: string;
+    email: string;
+    created_on: Date;
+    last_login: Date;
     token: string;
-})[] = [
-        {
-            id: 0,
-            username: 'pertinate',
-            password: '1234',
-            token: null
-        }
-    ];
+    token_expires: number;
 
-const getUser = () => {
+    constructor(userInfo: {
+        user_id: number;
+        username: string;
+        email: string;
+        created_on: Date;
+        last_login: Date;
+        token?: string;
+    }) {
+        this.user_id = userInfo.user_id;
+        this.username = userInfo.username;
+        this.email = userInfo.email;
+        this.created_on = userInfo.created_on;
+        this.last_login = userInfo.last_login;
+        this.token = userInfo.token;
+    }
 
-};
+    login = (password: string) => {
 
-const userLogin = () => {
+    };
 
-};
+    logout = () => {
 
-const userLogout = () => {
+    };
 
-};
+    revokeToken = () => {
 
-const userTokenRevoke = () => {
+    };
 
-};
+    renewToken = () => {
 
-const userTokenNew = () => {
+    };
 
-};
+    createToken = () => {
+        this.token = jwt.sign({
+            date: (new Date(Date.now() + 1000 * 60 * 60 * 24))
+        }, 'my secret jwt', { expiresIn: '24h' });
+    };
 
-const userTokenCompare = () => {
-
-};
-
-const gameUserTokenNew = () => {
-
-};
-
-const gameUserTokenRevoke = () => {
-
-};
-
-const gameUserTokenCompare = () => {
-
-};
+    toJSON() {
+        return JSON.stringify({
+            user_id: this.user_id,
+            username: this.username,
+            email: this.email,
+            created_on: this.created_on,
+            last_login: this.last_login,
+            token: this.token,
+        });
+    }
+}
